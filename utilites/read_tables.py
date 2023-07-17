@@ -1,4 +1,4 @@
-from .quote_definition import Header, HeaderOption, tables, TableItem
+from .quote_definition import Header, HeaderOption, tables, TableItem, failed_tables
 from .settings import SourceData, TABLES_NUMBER_PATTERN, DEBUG_ON
 from .check_by_list import check_by_list
 import csv
@@ -80,7 +80,7 @@ def pop_in_table_data(data: SourceData, row):
 
 def read_tables(data: SourceData):
     right_format_tables = []
-    broken_format_tables = []
+
     for row_i in range(1, data.row_max):
         base_test = check_by_list(data, row_i, ['B', 'C', 'D', 'E', 'F', 'G', 'H'], "table")
         if base_test:
@@ -91,9 +91,10 @@ def read_tables(data: SourceData):
                 # print(f"таблица {value[:30]}...")
                 pop_in_table_data(data, row_i)
             else:
-                broken_format_tables.append((row_i, value))
+                failed_tables.append((row_i, value))
 
-    print(f"Прочитано таблиц: {len(right_format_tables) + len(broken_format_tables)}")
+    print(f"Прочитано таблиц: {len(right_format_tables) + len(failed_tables)}")
     print(f"\tправильных: {len(right_format_tables)}")
-    print(f"\tкривых: {len(broken_format_tables)}")
+    print(f"\tкривых: {len(failed_tables)}")
+
 

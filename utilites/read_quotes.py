@@ -98,30 +98,5 @@ def read_quotes(data: SourceData):
     print(f"\tвсего расценок в таблицах: {qtable}")
     print(f"\tбез таблиц: {all_quotes - qtable}")
 
-    # if len(quotes) > 0:
-    #     fp = r".\output\fine_quotes.txt"
-    #     with open(fp, 'w', encoding='utf-8') as file_out:
-    #         for i in range(len(quotes)):
-    #             file_out.write(f"{i + 1:<5}: {quotes[i]}\n")  # .short_str()
-    #
-    #     column_name = [x.name for x in fields(quotes[0])]
-    #     fp = r".\output\fine_quotes.csv"
-    #     with open(fp, 'w', newline='') as file:
-    #         writer = csv.writer(file, delimiter=';')  #
-    #         writer.writerow(column_name)
-    #         [writer.writerow(q.csv_list()) for q in quotes]
-    #
-    #
-    # if len(heap) > 0:
-    #     fp = r".\output\bug_quotes.txt"
-    #     with open(fp, 'w', encoding='utf-8') as file_out:
-    #         for i in range(len(heap)):
-    #             file_out.write(f"{i + 1:<5}: {heap[i]}\n")  # .short_str()
-    #
-    #     column_name = [x.name for x in fields(heap[0])]
-    #     fp = r".\output\bug_quotes.csv"
-    #     with open(fp, 'w', newline='') as file:
-    #         writer = csv.writer(file, delimiter=';')  #
-    #         writer.writerow(column_name)
-    #         [writer.writerow(q.csv_list()) for q in heap]
+
 

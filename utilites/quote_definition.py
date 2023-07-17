@@ -108,6 +108,7 @@ class Collection:
 QUOTE_TYPE: list[str] = ["основная", "дополнительная"]
 
 tables: dict[str, TableItem] = dict()
+failed_tables: list[tuple[int, str]] = list()
 quotes: list[Quote] = list()
 heap: list[Quote] = list()
 collections: dict[str, Collection] = dict()

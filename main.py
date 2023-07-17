@@ -8,11 +8,15 @@ import pprint
 # fn = r"template_5_67_v_1.xlsx"
 # sn = 'name'
 
-fp = r"F:\Kazak\Google Диск\1_KK\Job_CNAC\office_targets\tasck_2\sources"
+# fp = r"F:\Kazak\Google Диск\1_KK\Job_CNAC\office_targets\tasck_2\sources"
 # fn = r"template_3_68.xlsx"
+# fn = r"template_3_68_Collection_6.xlsx"
 # fn = r"template_4_68.xlsx"
 fn = r"template_5_67.xlsx"
 sn = 'name'
+
+fp = r"C:\Users\kazak.ke\Documents\Задачи\Задача_2_exel_pars\данные\source"
+
 
 
 s = io.StringIO()
@@ -24,8 +28,9 @@ with contextlib.redirect_stdout(s):
     read_collection(data)
     read_tables(data)
     read_quotes(data)
-print(s.getvalue())
+    out_string = s.getvalue()
 
-
-fo = fn[:-5] + "_output.xlsx"
-save_result_excel_file(fo, r'output', s.getvalue())
+if out_string:
+    print(out_string)
+    fo = fn[:-5] + "_output.xlsx"
+    save_result_excel_file(fo, r'output', out_string)

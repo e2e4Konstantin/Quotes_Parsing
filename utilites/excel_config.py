@@ -14,8 +14,8 @@ class ExcelControl:
         self.sheet_name = None
         self.book = None
         self.sheet = None
-        self.colors = ["00FF9900", "0099CC00", "00FFCC00", "000066CC", "00666699", "00C0C0C0", "00FF99CC", "0099CCFF"]
-        self.items = ['Quote', 'Attributes', 'Options', 'Collections', 'Tables', 'Console', 'Header']
+        self.colors = ["00FF9900", "0099CC00", "00FFCC00", "000066CC", "00666699", "00C0C0C0", "00FF99CC", "00993366", "0099CCFF"]
+        self.items = ['Quote', 'Attributes', 'Options', 'Collections', 'Tables', 'Console', 'BrokenTable', 'Header', ]
         self.tab_color = dict(zip(self.items, self.colors))
         self.header_style = None
 
@@ -187,3 +187,16 @@ class ExcelControl:
             sheet['A1'].alignment = Alignment(horizontal='left', vertical="bottom", wrapText=True)
         else:
             print(f"save_console >> в файле {self.full_path} не найден лист {sheet_name}.")
+
+
+    def save_failed_tables(self, broken_tables: list[tuple[int, str]]):  # 'BrokenTable' 6
+        sheet_name = self.items[6]
+        if sheet_name in self.book.sheetnames:
+            sheet = self.book[sheet_name]
+            header = ["row", "название таблицы"]
+            self.header_write(sheet, header)
+            sheet = self.book[sheet_name]
+            for table in broken_tables:
+                sheet.append([table[0], table[1]])
+        else:
+            print(f"save_failed_tables >> в файле {self.full_path} не найден лист {sheet_name}.")
