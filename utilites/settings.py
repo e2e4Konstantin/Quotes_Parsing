@@ -2,6 +2,8 @@ import os
 import sys
 import re
 import pandas
+import psutil
+import gc
 
 DEBUG_ON = False
 
@@ -48,11 +50,23 @@ pattern_collection.update({
     "H": (re.compile(r"Сборник \d+\."), SOFT_MATCH),
 })
 
+pattern_resource = {
+    "B": (re.compile(r"(?:ТСН|КТЦ)"), SOFT_MATCH),
+    "C": (re.compile(r"\d+\.\d+(-\d+)*"), STRONG_MATCH),
+    "D": (re.compile(r"\S+"), SOFT_MATCH),
+    "H": (re.compile(r"Атрибуты"), SOFT_MATCH),
+}
+
+
+
+
 
 class Stuff:
     def __init__(self, *args, **kwargs):
-        # self.test_points = pattern_rulls
-        self.test_templates = {"quote": pattern_quote, "table": pattern_table, "collection": pattern_collection}
+
+        self.types_items = ["quote", "table", "collection", "resource"]
+        self.templates_sets = [pattern_quote, pattern_table, pattern_collection, pattern_resource]
+        self.test_templates = dict(zip(self.types_items, self.templates_sets))
         self.column_number = {}
         self.column_number_generate()
 
@@ -121,3 +135,19 @@ class SourceData(Stuff):
                 case _:
                     return str(src_value or "").strip()
         return ""
+
+    def clear_memory(self):
+        print(f"-->> \n{sys.getsizeof(self.df) = } ")
+        print('RAM memory % used:', psutil.virtual_memory()[2])
+        print('RAM Used (GB):', psutil.virtual_memory()[3] / 1000000000)
+        print()
+        print(f'{self.df.memory_usage().sum()} bytes')
+
+        del self.df
+        gc.collect()
+
+        print('RAM memory % used:', psutil.virtual_memory()[2])
+        print('RAM Used (GB):', psutil.virtual_memory()[3] / 1000000000)
+
+
+

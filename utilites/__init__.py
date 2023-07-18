@@ -8,3 +8,4 @@ from .read_collection import read_collection
 from .check_cod_quotes import check_cod_quotes
 
 from .save_result_excel_file import save_result_excel_file
+from .read_resources import read_resources

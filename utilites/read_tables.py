@@ -4,7 +4,7 @@ from .check_by_list import check_by_list
 import csv
 
 
-def attributes_get(data: SourceData, src_tables: TableItem, row) -> int:
+def attributes_get(data: SourceData, src_tables: TableItem, row: int) -> int:
     """ Читает названия атрибутов начиная с колонки 'О' до тех пор пока сверху пусто"""
     src_tables.attribute_table.clear()  # очищаем список атрибутов
     column_a = data.get_column_number("O")  # получаем номер колонки "O"
@@ -52,10 +52,10 @@ def skip_empty_cells(data: SourceData, row, start_column) -> int:
     return data.column_max + 1
 
 
-def options_get(data: SourceData, src_tables: TableItem, row, start_columns):
+def options_get(data: SourceData, src_tables: TableItem, row, start_column):
     """ Читает заголовки параметров"""
     src_tables.options_table.clear()
-    column_i = skip_empty_cells(data, row, start_columns)
+    column_i = skip_empty_cells(data, row, start_column)
     while column_i < data.column_max:
         column_i = read_options(data, src_tables, row, column_i)
         # column_i += 1
