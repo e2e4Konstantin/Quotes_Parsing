@@ -13,10 +13,12 @@ source_files = {
     6: (r"res_68.xlsx", "1")
 }
 
+
 pl = "home" # "office"
 
-# fn = 3
-# handling_quotes((source_files[fn][0], paths[pl], source_files[fn][1]))
+if __name__ == "__main__":
+    fn = 5
+    handling_quotes((source_files[fn][0], paths[pl], source_files[fn][1]))
 
-fn = 6
-handling_resource((source_files[fn][0], paths[pl], source_files[fn][1]))
+    # fn = 6
+    # handling_resource((source_files[fn][0], paths[pl], source_files[fn][1]))
