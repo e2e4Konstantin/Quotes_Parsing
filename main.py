@@ -1,41 +1,22 @@
-from utilites import read_resources, SourceData, check_cod_quotes, read_collection, read_tables, read_quotes, save_result_excel_file
-import contextlib
-import io
-import pprint
+from tasks import handling_quotes, handling_resource
 
-# fp = r"F:\Kazak\Google Диск\1_KK\Job_CNAC\office_targets\tasck_2\tmp2"
-# fn = r"template_3_68_v_2.xlsx"
-# fn = r"template_5_67_v_1.xlsx"
-# sn = 'name'
+paths = {
+    "home": r"F:\Kazak\Google Диск\1_KK\Job_CNAC\office_targets\tasck_2\sources",
+    "office": r" ",
+}
 
-fp = r"F:\Kazak\Google Диск\1_KK\Job_CNAC\office_targets\tasck_2\sources"
-# # fn = r"template_3_68.xlsx"
-# # fn = r"template_4_68.xlsx"
-# fn = r"template_5_67.xlsx"
+source_files = {
+    0: (r"template_3_68_v_1.xlsx", "name"),
+    3: (r"template_3_68.xlsx", "name"),
+    4: (r"template_4_68.xlsx", "name"),
+    5: (r"template_5_67.xlsx", "name"),
+    6: (r"res_68.xlsx", "1")
+}
 
-fn = r"res_68_v_2.xlsx"
-sn = '1'
+pl = "home" # "office"
 
-data = SourceData(file_name=fn, file_path=fp, sheet_name=sn)
-print(data, "\n")
-print(f"непустых значений в столбце 'C': {data.df[data.df.columns[2]].count()}", "\n")
-read_resources(data)
+# fn = 3
+# handling_quotes((source_files[fn][0], paths[pl], source_files[fn][1]))
 
-
-
-
-#
-# s = io.StringIO()
-# with contextlib.redirect_stdout(s):
-#     data = SourceData(file_name=fn, file_path=fp, sheet_name=sn)
-#     print(data, "\n")
-#     print(f"непустых значений в столбце 'G': {data.df[data.df.columns[6]].count()}", "\n")
-#     check_cod_quotes(data)
-#     read_collection(data)
-#     read_tables(data)
-#     read_quotes(data)
-# print(s.getvalue())
-#
-#
-# fo = fn[:-5] + "_output.xlsx"
-# save_result_excel_file(fo, r'output', s.getvalue())
+fn = 6
+handling_resource((source_files[fn][0], paths[pl], source_files[fn][1]))

@@ -2,21 +2,27 @@ import openpyxl
 from openpyxl.styles import (NamedStyle, Font, Border, Side, PatternFill, Alignment)
 import os
 
-from .quote_definition import Quote, Collection
+from .quote_definition import Quote, Collection, Resource
 from dataclasses import fields
 
 
 class ExcelControl:
-    def __init__(self, excel_file_name: str = None, file_path: str = None):
+    def __init__(self, excel_file_name: str = None, file_path: str = None, use: str = None):
+        self.use = use
         self.file_name = excel_file_name
         self.file_path = file_path
         self.full_path = os.path.abspath(os.path.join(file_path, excel_file_name))
         self.sheet_name = None
         self.book = None
         self.sheet = None
-        self.colors = ["00FF9900", "0099CC00", "00FFCC00", "000066CC", "00666699", "00C0C0C0", "00FF99CC", "00993366", "0099CCFF"]
-        self.items = ['Quote', 'Attributes', 'Options', 'Collections', 'Tables', 'Console', 'BrokenTable', 'Header', ]
-        self.tab_color = dict(zip(self.items, self.colors))
+
+        self.colors_quote = ["00FF9900", "0099CC00", "00FFCC00", "000066CC", "00666699", "00C0C0C0", "00FF99CC"]
+        self.items_quote_set = ['Quote', 'Attributes', 'Options', 'Collections', 'Tables', 'Console', 'BrokenTable']
+        self.tab_color = dict(zip(self.items_quote_set, self.colors_quote))
+        self.tab_color['Header'] = "0099CCFF"
+        self.tab_color['Resources'] = "00993366"
+        self.items_resources_set = ['Resources', 'Attributes', 'Options', 'Console']
+
         self.header_style = None
 
     def __enter__(self):
@@ -74,7 +80,12 @@ class ExcelControl:
         if self.book:
             for sheet in self.book.worksheets:
                 self.book.remove(sheet)
-            for name in self.items[:-1]:
+            items_set = None
+            if self.use == "Quote":
+                items_set = self.items_quote_set
+            elif self.use == "Resource":
+                items_set = self.items_resources_set
+            for name in items_set:
                 sheet = self.book.create_sheet(name)
                 sheet.sheet_properties.tabColor = self.tab_color[name]
 
@@ -82,12 +93,10 @@ class ExcelControl:
         if sheet and len(header_list) > 0:
             sheet.append(header_list)
             for cell in range(1, len(header_list) + 1):
-                sheet.cell(row=1, column=cell).fill = PatternFill(
-                    "solid", fgColor=self.tab_color[self.items[5]]
-                )  # 'Header'
+                sheet.cell(row=1, column=cell).fill = PatternFill("solid", fgColor=self.tab_color['Header'])
 
     def save_quotes(self, quotes_data):
-        sheet_name = self.items[0]  # 'Quote'
+        sheet_name = self.items_quote_set[0]  # 'Quote'
         if sheet_name in self.book.sheetnames:
             sheet = self.book[sheet_name]
             header = ["ROW", "GROUP_WORK_PROCESS", "PRESSMARK", "TITLE", "UNIT_OF_MEASURE", "STAT_SUM",
@@ -104,7 +113,7 @@ class ExcelControl:
             print(f"save_quote >> в файле {self.full_path} не найден лист {sheet_name}.")
 
     def save_attributes(self, quotes_data):
-        sheet_name = self.items[1]  # 'Attributes'
+        sheet_name = self.items_quote_set[1]  # 'Attributes'
         if sheet_name in self.book.sheetnames:
             sheet = self.book[sheet_name]
             header = ["ROW", "PRESSMARK", "ATTRIBUTE_TITLE", "VALUE", ]
@@ -123,7 +132,7 @@ class ExcelControl:
             print(f"save_attributes >> в файле {self.full_path} не найден лист {sheet_name}.")
 
     def save_options(self, quotes_data):
-        sheet_name = self.items[2]  # 'Options'
+        sheet_name = self.items_quote_set[2]  # 'Options'
         if sheet_name in self.book.sheetnames:
             sheet = self.book[sheet_name]
             header = ["ROW", "PRESSMARK", "PARAMETER_TITLE",
@@ -144,7 +153,7 @@ class ExcelControl:
             print(f"save_options >> в файле {self.full_path} не найден лист {sheet_name}.")
 
     def save_collections(self, collections_data):
-        sheet_name = self.items[3]  # 'Collections'
+        sheet_name = self.items_quote_set[3]  # 'Collections'
         if sheet_name in self.book.sheetnames:
             sheet = self.book[sheet_name]
 
@@ -166,7 +175,7 @@ class ExcelControl:
             print(f"save_collections >> в файле {self.full_path} не найден лист {sheet_name}.")
 
     def save_tables(self, tables_data):
-        sheet_name = self.items[4]  # 'Tables'
+        sheet_name = self.items_quote_set[4]  # 'Tables'
         if sheet_name in self.book.sheetnames:
             sheet = self.book[sheet_name]
             header = ["row", "номер", "код", "атрибутов", "параметров", "название", "атрибуты", "параметры"]
@@ -178,7 +187,7 @@ class ExcelControl:
             print(f"save_tables >> в файле {self.full_path} не найден лист {sheet_name}.")
 
     def save_console(self, text_in: str):  # 'Console' 5
-        sheet_name = self.items[5]
+        sheet_name = self.items_quote_set[5]
         if sheet_name in self.book.sheetnames:
             sheet = self.book[sheet_name]
             sheet.row_dimensions[1].height = 200
@@ -188,9 +197,8 @@ class ExcelControl:
         else:
             print(f"save_console >> в файле {self.full_path} не найден лист {sheet_name}.")
 
-
     def save_failed_tables(self, broken_tables: list[tuple[int, str]]):  # 'BrokenTable' 6
-        sheet_name = self.items[6]
+        sheet_name = self.items_quote_set[6]    # 'BrokenTable'
         if sheet_name in self.book.sheetnames:
             sheet = self.book[sheet_name]
             header = ["row", "название таблицы"]
@@ -200,3 +208,71 @@ class ExcelControl:
                 sheet.append([table[0], table[1]])
         else:
             print(f"save_failed_tables >> в файле {self.full_path} не найден лист {sheet_name}.")
+
+    def save_resources(self, resource_data):
+        sheet_name = self.items_resources_set[0]  # Resources
+        if sheet_name in self.book.sheetnames:
+            sheet = self.book[sheet_name]
+            header = ["ROW", "A", "B", "PRESSMARK", "TITLE", "UOM", "USE_COUNT", "PARAMETERIZED_FLAG"]
+            self.header_write(sheet, header)
+            data_line = list()
+            for resource in resource_data:
+                line_data = [getattr(resource, x.name) for x in fields(Resource)]
+                line_data[7] = "++" if line_data[7] else " "
+                sheet.append(line_data[:-2])
+            sheet.column_dimensions['D'].width = 15
+            sheet.column_dimensions['E'].width = 80
+            sheet.column_dimensions['F'].width = 20
+            sheet.column_dimensions['G'].width = 10
+            sheet.column_dimensions['H'].width = 20
+            for row in sheet[2:sheet.max_row]:  # пропускаем заголовок
+                cell_f = row[5]  # column F
+                cell_f.alignment = Alignment(horizontal='center')
+                cell_f = row[7]  # column H
+                cell_f.alignment = Alignment(horizontal='center')
+        else:
+            print(f"save_resources >> в файле {self.full_path} не найден лист {sheet_name}.")
+
+    #
+    def save_resources_attributes(self, resource_data):
+        sheet_name = self.items_resources_set[1]  # 'Attributes'
+        if sheet_name in self.book.sheetnames:
+            sheet = self.book[sheet_name]
+            header = ["ROW", "PRESSMARK", "ATTRIBUTE_TITLE", "VALUE", ]
+            self.header_write(sheet, header)
+            data_line = list()
+            for resource in resource_data:
+                for attribute in resource.attributes_resource:
+                    data_line.clear()
+                    data_line.append(resource.row)
+                    data_line.append(resource.press_mark)
+                    data_line.append(attribute.name_attribute)
+                    data_line.append(attribute.value_attribute)
+                    sheet.append(data_line)
+            sheet.column_dimensions['B'].width = 13
+            sheet.column_dimensions['C'].width = 20
+            sheet.column_dimensions['D'].width = 50
+        else:
+            print(f"save_resources_attributes >> в файле {self.full_path} не найден лист {sheet_name}.")
+
+    def save_resources_options(self, resource_data):
+        sheet_name = self.items_resources_set[2]  # 'Options'
+        if sheet_name in self.book.sheetnames:
+            sheet = self.book[sheet_name]
+            header = ["ROW", "PRESSMARK", "PARAMETER_TITLE",
+                      "LEFT_BORDER", "RIGHT_BORDER", "UNIT_OF_MEASURE", "STEP", "PARAMETER_TYPE"]
+            self.header_write(sheet, header)
+            data_line = list()
+            for resource in resource_data:
+                for option in resource.options_resource:
+                    data_line.clear()
+                    data_line.append(resource.row)
+                    data_line.append(resource.press_mark)
+                    data_line.append(option.name_option)
+                    for value in option.value_option:
+                        data_line.append(value[1])
+                    sheet.append(data_line)
+            sheet.column_dimensions['B'].width = 12
+            sheet.column_dimensions['C'].width = 25
+        else:
+            print(f"save_resources_options >> в файле {self.full_path} не найден лист {sheet_name}.")

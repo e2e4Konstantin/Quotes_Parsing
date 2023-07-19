@@ -1,4 +1,4 @@
-from .quote_definition import Resource, resource_data, TableItem, Header, resource_tables, HeaderOption
+from .quote_definition import Resource, resource_data, TableItem, Header, resource_tables, HeaderOption, Attribute, Option
 from .settings import SourceData, DEBUG_ON
 from .check_by_list import check_by_list
 import re
@@ -80,7 +80,7 @@ def is_data_on_right_side(data: SourceData, row: int, starting_column: str) -> b
     return False
 
 
-def get_resource(data: SourceData, row: int, parent_table_row: int) -> Resource:
+def get_resource(data: SourceData, row: int, parent_table_index: int) -> Resource:
     """ Читает ресурс из data на строке row. """
     a_value = data.get_cell_str_value(row, data.get_column_number("A"))
     statistics_value = data.get_cell_str_value(row, data.get_column_number("F"))
@@ -94,14 +94,38 @@ def get_resource(data: SourceData, row: int, parent_table_row: int) -> Resource:
         use_count=int(statistics_value) if statistics_value.isdigit() else 0,
         parameterization=bool(data.get_cell_str_value(row, data.get_column_number("G"))),
     )
-    print(f"\tдля ресурса в строке: {row} найдена таблица в строке: {parent_table_row}")
+    # print(f"\tдля ресурса в строке: {row} найдена таблица : {resource_tables[parent_table_index].cod_table}")
+    # заполняем атрибуты
+    table = resource_tables[parent_table_index]
+    if len(table.attribute_table) > 0:
+        for attribute in table.attribute_table:
+            value = data.get_cell_str_value(row, attribute.column_header)
+            if value:
+                resource_item.attributes_resource.append(
+                    Attribute(name_attribute=attribute.name_header, value_attribute=value)
+                )
+    # заполняем параметры
+    if len(table.options_table) > 0:
+        for option in table.options_table:
+            # создаем экземпляр параметра
+            tmp_options = Option()
+            # имя параметра
+            tmp_options.name_option = option.name_header_option
+            # читаем значения параметра
+            for header_option in option.option_headers:
+                value = data.get_cell_str_value(row, header_option.column_header)
+                tmp_options.value_option.append((header_option.name_header, value))
+            # добавить параметр если есть хоть одно непустое значение
+            if any([x[1] for x in tmp_options.value_option]):
+                resource_item.options_resource.append(tmp_options)
     return resource_item
 
 
 def find_row_parent_table(row: int, table_rows: list[int]) -> int:
+    """ Вернет индекс таблицы в списке, которая самая ближняя сверху """
     distance = {i: row - table_rows[i] for i in range(len(table_rows)) if row - table_rows[i] > 0}
     min_dist = min(distance, key=lambda i: distance[i], default=-1)
-    return table_rows[min_dist] if min_dist >= 0 else -1
+    return min_dist if min_dist >= 0 else -1
 
 
 def read_resources(data: SourceData):
@@ -111,7 +135,7 @@ def read_resources(data: SourceData):
     if len(resource_tables) > 0:
         table_rows: list[int] = [x.row_table for x in resource_tables]
         table_rows.sort()
-        print(f"\nПрочитано таблиц ресурсов: {len(resource_tables)}, {table_rows}")
+        print(f"\nПрочитано таблиц ресурсов: {len(resource_tables)}") # , {table_rows}
 
         resource_with_data = 0
         resource_without_data = 0
