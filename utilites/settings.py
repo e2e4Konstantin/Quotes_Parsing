@@ -90,7 +90,7 @@ class SourceData(Stuff):
         self.file_path = file_path
         self.sheet_name = sheet_name
         self.full_path = None
-        self.df: pandas.DataFrame()
+        self.df: pandas.DataFrame() = None
 
         self.row_max = 0                # максимальный индекс строки
         self.column_max = 0             # максимальный индекс колонки
@@ -136,18 +136,7 @@ class SourceData(Stuff):
                     return str(src_value or "").strip()
         return ""
 
-    def clear_memory(self):
-        print(f"-->> \n{sys.getsizeof(self.df) = } ")
-        print('RAM memory % used:', psutil.virtual_memory()[2])
-        print('RAM Used (GB):', psutil.virtual_memory()[3] / 1000000000)
-        print()
-        print(f'{self.df.memory_usage().sum()} bytes')
 
-        del self.df
-        gc.collect()
-
-        print('RAM memory % used:', psutil.virtual_memory()[2])
-        print('RAM Used (GB):', psutil.virtual_memory()[3] / 1000000000)
 
 
 

@@ -64,6 +64,8 @@ def read_quotes(data: SourceData):
 
     quotes_without_table = 0
     all_quotes = 0
+    recorded_quotes = 0
+    blank_attributes_and_options = 0
     for row_i in range(0, data.row_max + 1):
         base_test = check_by_list(data, row_i, ['B', 'C', 'D', 'E', 'F', 'G'], "quote")
         if base_test:
@@ -76,27 +78,28 @@ def read_quotes(data: SourceData):
                 key_collection = get_collection(quote_i.table_quote)
                 if len(quote_i.attributes_quote) > 0 or len(quote_i.options_quote) > 0:
                     quotes.append(quote_i)
+                    recorded_quotes += 1
                     if key_collection:
                         collections[key_collection].quantity_parameterized_quotes += 1
                 else:
                     heap.append(quote_i)
+                    blank_attributes_and_options += 1
                     if key_collection:
                         collections[key_collection].quantity_not_parameterized_quotes += 1
                         collections[key_collection].not_parameterized_list.append(quote_i.cod_quote)
 
-                    if DEBUG_ON: print(f"\t\tread_quotes >> Расценку {quote_i.cod_quote} "
-                                       f"не запоминаем {len(quote_i.attributes_quote)} {len(quote_i.options_quote)}")
+                    if DEBUG_ON: print(f"\t\tread_quotes >> Расценку {quote_i.cod_quote} не запоминаем "
+                                       f"атр: {len(quote_i.attributes_quote)} парам:{len(quote_i.options_quote)}")
             else:
                 quotes_without_table += 1
                 if DEBUG_ON: print(
                     f"\tread_quotes ->> нет таблицы {table_cod} для расценки на строке {row_i+1}")
 
-    print(f"\nПрочитано расценок: {all_quotes}")
-    print(f"\tзаписано: {len(quotes)}")
-    print(f"\tпустые атрибуты и параметры: {len(heap)}")
-    qtable = len(quotes) + len(heap)
-    print(f"\tвсего расценок в таблицах: {qtable}")
-    print(f"\tбез таблиц: {all_quotes - qtable}")
+    print(f"Прочитано расценок: {all_quotes}")
+    print(f"\tзаписано: {recorded_quotes}")
+    print(f"\tпустые атрибуты и параметры: {blank_attributes_and_options}")
+    print(f"\tвсего расценок в таблицах: {recorded_quotes + blank_attributes_and_options}")
+    print(f"\tрасценок без таблиц: {quotes_without_table}")
 
 
 

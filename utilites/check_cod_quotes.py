@@ -13,4 +13,4 @@ def check_cod_quotes(data: SourceData):
                 match_result = template_g.match(value)
                 if match_result.start() > 0 or match_result.end() < len(value):
                     # bad cod
-                    print(f"\t!!! кривой номер расценки: '{value}' в строке: {row+1}\n")
+                    print(f"\t!!! кривой номер расценки: '{value}' в строке: {row+1}")

@@ -190,10 +190,13 @@ class ExcelControl:
         sheet_name = self.items_quote_set[5]
         if sheet_name in self.book.sheetnames:
             sheet = self.book[sheet_name]
-            sheet.row_dimensions[1].height = 200
+            for x in range(1, 7):
+                sheet.row_dimensions[x].height = 140
             sheet.column_dimensions['A'].width = 100
             sheet['A1'] = text_in
-            sheet['A1'].alignment = Alignment(horizontal='left', vertical="bottom", wrapText=True)
+            sheet.merge_cells('A1:B6')
+            sheet['A1'].font = Font(size=9)
+            sheet['A1'].alignment = Alignment(horizontal='left', vertical="top", wrapText=True) #"bottom"
         else:
             print(f"save_console >> в файле {self.full_path} не найден лист {sheet_name}.")
 

@@ -14,10 +14,12 @@ def fill_in_collection_data(data: SourceData, row):
 
 
 def read_collection(data: SourceData):
+    collections_count = 0
     for row in range(0, data.row_max):
         base_test = check_by_list(data, row, ['B', 'C', 'D', 'E', 'F', 'G', 'H'], "collection")
         if base_test:
             # print(f"сборник: {data.get_cell_str_value(row, data.get_column_number('H'))}")
             fill_in_collection_data(data, row)
-    print(f"Прочитано сборников: {len(collections)}\n")
+            collections_count += 1
+    print(f"Прочитано сборников: {collections_count}")
 

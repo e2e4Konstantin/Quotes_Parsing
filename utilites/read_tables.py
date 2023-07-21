@@ -80,7 +80,8 @@ def pop_in_table_data(data: SourceData, row):
 
 def read_tables(data: SourceData):
     right_format_tables = []
-
+    # failed_tables = [] объявлен в quote_definition.py
+    failed_tables_count = 0
     for row_i in range(1, data.row_max):
         base_test = check_by_list(data, row_i, ['B', 'C', 'D', 'E', 'F', 'G', 'H'], "table")
         if base_test:
@@ -92,9 +93,10 @@ def read_tables(data: SourceData):
                 pop_in_table_data(data, row_i)
             else:
                 failed_tables.append((row_i, value))
+                failed_tables_count += 1
 
     print(f"Прочитано таблиц: {len(right_format_tables) + len(failed_tables)}")
     print(f"\tправильных: {len(right_format_tables)}")
-    print(f"\tкривых: {len(failed_tables)}")
+    print(f"\tкривых: {failed_tables_count}")
 
 
