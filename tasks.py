@@ -23,6 +23,7 @@ def save_all_to_excel_file(file_name: str, file_path: str, use_type: str, consol
 
 
 def mill_quote_data_file(file_data: tuple[str, str, str]) -> None:
+    print(f"файл: {file_data[0]}, лист: {file_data[2]}, папка: {file_data[1]}")
     data = SourceData(file_name=file_data[0], file_path=file_data[1], sheet_name=file_data[2])
     print(data.df.info(verbose=False, show_counts=False))
     print(f"непустых значений в столбце 'G': {data.df[data.df.columns[6]].count()}", "\n")
@@ -38,7 +39,18 @@ def handling_quotes(file_data: tuple[str, str, str]):
     s = io.StringIO()
     with contextlib.redirect_stdout(s):
         mill_quote_data_file(file_data)
+        print(f"{'-'*40}>>")
+        for quote in quotes:
+            quote.options_control()
+        print()
     print(s.getvalue())
+
+    # for quote in quotes:
+    #     if quote.cod_quote == '3.9-16-2':
+    #         pprint.pprint(quote, width=200)
+    #         r = quote.options_control()
+    #         print(r)
+    #         break
     file_out = file_data[0][:-5] + "_output.xlsx"
     save_all_to_excel_file(file_out, r'output', "Quote", s.getvalue())
 
@@ -47,9 +59,12 @@ def stream_handling_quotes(files: list[tuple[str, str, str]]):
     s = io.StringIO()
     with contextlib.redirect_stdout(s):
         for file in files:
-            print(f"\n{file}")
             mill_quote_data_file(file)
-        print(f"\n<<{'-' * 50}>>\nПрочитано расценок: {len(quotes)}")
+            print()
+        print(f"\n<<{'-' * 50}>>\nПрочитано расценок: {len(quotes)}\n")
+        for quote in quotes:
+            quote.options_control()
+        print()
     print(s.getvalue())
 
     save_all_to_excel_file("template_all_output.xlsx", r'output', "Quote", s.getvalue())

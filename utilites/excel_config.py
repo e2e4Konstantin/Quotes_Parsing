@@ -190,11 +190,12 @@ class ExcelControl:
         sheet_name = self.items_quote_set[5]
         if sheet_name in self.book.sheetnames:
             sheet = self.book[sheet_name]
-            for x in range(1, 7):
+            for x in range(1, 11):
                 sheet.row_dimensions[x].height = 140
-            sheet.column_dimensions['A'].width = 100
+            sheet.column_dimensions['A'].width = 50
+            sheet.column_dimensions['B'].width = 50
             sheet['A1'] = text_in
-            sheet.merge_cells('A1:B6')
+            sheet.merge_cells('A1:B10')
             sheet['A1'].font = Font(size=9)
             sheet['A1'].alignment = Alignment(horizontal='left', vertical="top", wrapText=True) #"bottom"
         else:

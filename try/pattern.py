@@ -1,4 +1,4 @@
-import re
+import re_options
 STRONG_MATCH = True
 SOFT_MATCH = False
 
