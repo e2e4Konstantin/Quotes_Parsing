@@ -8,6 +8,8 @@ import gc
 import sys
 import os
 import pprint
+import pickle
+
 
 
 def save_all_to_excel_file(file_name: str, file_path: str, use_type: str, console_text: str = "") -> None:
@@ -66,6 +68,9 @@ def stream_handling_quotes(files: list[tuple[str, str, str]]):
             quote.options_control()
         print()
     print(s.getvalue())
+
+    with open(r'output\out_string.pickle', 'wb') as handle:
+        pickle.dump(s.getvalue(), handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     save_all_to_excel_file("template_all_output.xlsx", r'output', "Quote", s.getvalue())
 

@@ -190,14 +190,21 @@ class ExcelControl:
         sheet_name = self.items_quote_set[5]
         if sheet_name in self.book.sheetnames:
             sheet = self.book[sheet_name]
-            for x in range(1, 11):
-                sheet.row_dimensions[x].height = 140
-            sheet.column_dimensions['A'].width = 50
-            sheet.column_dimensions['B'].width = 50
-            sheet['A1'] = text_in
-            sheet.merge_cells('A1:B10')
-            sheet['A1'].font = Font(size=9)
-            sheet['A1'].alignment = Alignment(horizontal='left', vertical="top", wrapText=True) #"bottom"
+            # for x in range(1, 11):
+            #     sheet.row_dimensions[x].height = 140
+            # sheet.column_dimensions['A'].width = 50
+            # sheet.column_dimensions['B'].width = 50
+            # sheet['A1'] = text_in
+            # sheet.merge_cells('A1:B10')
+            # sheet['A1'].font = Font(size=9)
+            # sheet['A1'].alignment = Alignment(horizontal='left', vertical="top", wrapText=True) #"bottom"
+
+            sheet.column_dimensions['A'].width = 100
+            text_by_lines = text_in.splitlines()
+            for i, line in enumerate(text_by_lines):
+                sheet.append((line,))
+                sheet.cell(row=i+1, column=1).font = Font(size=10)
+                sheet.cell(row=i + 1, column=1).alignment = Alignment(horizontal='left', vertical="bottom", wrapText=True)
         else:
             print(f"save_console >> в файле {self.full_path} не найден лист {sheet_name}.")
 
