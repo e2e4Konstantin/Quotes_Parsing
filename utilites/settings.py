@@ -58,14 +58,20 @@ pattern_resource = {
 }
 
 
+pattern_equipment  = {
+    "B": (re.compile(r"(?:ТСН|КТЦ)"), SOFT_MATCH),
+    "C": (re.compile(r"\d+\.\d+(-\d+)*"), STRONG_MATCH),
+    "D": (re.compile(r"\S+"), SOFT_MATCH),
+    "I": (re.compile(r"Атрибуты"), SOFT_MATCH),
+}
 
 
 
 class Stuff:
     def __init__(self, *args, **kwargs):
 
-        self.types_items = ["quote", "table", "collection", "resource"]
-        self.templates_sets = [pattern_quote, pattern_table, pattern_collection, pattern_resource]
+        self.types_items = ["quote", "table", "collection", "resource", "equipment"]
+        self.templates_sets = [pattern_quote, pattern_table, pattern_collection, pattern_resource, pattern_equipment]
         self.test_templates = dict(zip(self.types_items, self.templates_sets))
         self.column_number = {}
         self.column_number_generate()

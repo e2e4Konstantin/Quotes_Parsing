@@ -174,6 +174,27 @@ class Resource:
         return f'{type(self).__name__}({s})'
 
 
+@dataclass
+class Equipment:
+    row: int
+    a_column: int
+    origin: str
+    press_mark: str
+    title: str
+    measuring_unit: str
+    use_count: int
+    parameterization: bool
+    remark: str
+    attributes_equipment: list[Attribute] = field(default_factory=list)
+    options_equipment: list[Option] = field(default_factory=list)
+
+    def __str__(self):
+        s = '; '.join(f'{x.name}={getattr(self, x.name)!r}' for x in fields(self))
+        return f'{type(self).__name__}({s})'
+
+
+
+
 
 
 QUOTE_TYPE: list[str] = ["основная", "дополнительная"]
@@ -183,5 +204,9 @@ failed_tables: list[tuple[int, str]] = list()
 quotes: list[Quote] = list()
 heap: list[Quote] = list()
 collections: dict[str, Collection] = dict()
+#
 resource_data: list[Resource] = list()
 resource_tables: list[TableItem] = list()
+#
+equipment_data: list[Equipment] = list()
+equipment_tables: list[TableItem] = list()

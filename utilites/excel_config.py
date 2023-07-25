@@ -2,7 +2,7 @@ import openpyxl
 from openpyxl.styles import (NamedStyle, Font, Border, Side, PatternFill, Alignment)
 import os
 
-from .quote_definition import Quote, Collection, Resource
+from .quote_definition import Quote, Collection, Resource, Equipment
 from dataclasses import fields
 
 
@@ -21,7 +21,9 @@ class ExcelControl:
         self.tab_color = dict(zip(self.items_quote_set, self.colors_quote))
         self.tab_color['Header'] = "0099CCFF"
         self.tab_color['Resources'] = "00993366"
+        self.tab_color['Equipment'] = "00FF9900"
         self.items_resources_set = ['Resources', 'Attributes', 'Options', 'Console']
+        self.items_equipment_set = ['Equipment', 'Attributes', 'Options', 'Console']
 
         self.header_style = None
 
@@ -85,6 +87,8 @@ class ExcelControl:
                 items_set = self.items_quote_set
             elif self.use == "Resource":
                 items_set = self.items_resources_set
+            elif self.use == "Equipment":
+                items_set = self.items_equipment_set
             for name in items_set:
                 sheet = self.book.create_sheet(name)
                 sheet.sheet_properties.tabColor = self.tab_color[name]
@@ -287,3 +291,70 @@ class ExcelControl:
             sheet.column_dimensions['C'].width = 25
         else:
             print(f"save_resources_options >> в файле {self.full_path} не найден лист {sheet_name}.")
+
+    def save_equipment(self, equipment_data):
+        sheet_name = self.items_equipment_set[0]  # Equipment
+        if sheet_name in self.book.sheetnames:
+            sheet = self.book[sheet_name]
+            header = ["ROW", "A", "B", "PRESSMARK", "TITLE", "UOM", "USE_COUNT", "PARAMETERIZED_FLAG", "REMARK"]
+            self.header_write(sheet, header)
+            # line_data = list()
+            for equipment in equipment_data:
+                line_data = [getattr(equipment, x.name) for x in fields(Equipment)]
+                line_data[7] = "++" if line_data[7] else " "
+                sheet.append(line_data[:-2])
+            sheet.column_dimensions['D'].width = 15
+            sheet.column_dimensions['E'].width = 80
+            sheet.column_dimensions['F'].width = 20
+            sheet.column_dimensions['G'].width = 10
+            sheet.column_dimensions['H'].width = 20
+            for row in sheet[2:sheet.max_row]:  # пропускаем заголовок
+                cell_f = row[5]  # column F
+                cell_f.alignment = Alignment(horizontal='center')
+                cell_f = row[7]  # column H
+                cell_f.alignment = Alignment(horizontal='center')
+        else:
+            print(f"save_equipment >> в файле {self.full_path} не найден лист {sheet_name}.")
+
+    def save_equipment_attributes(self, equipment_data):
+        sheet_name = self.items_equipment_set[1]  # 'Attribute'
+        if sheet_name in self.book.sheetnames:
+            sheet = self.book[sheet_name]
+            header = ["ROW", "PRESSMARK", "ATTRIBUTE_TITLE", "VALUE", ]
+            self.header_write(sheet, header)
+            data_line = list()
+            for equipment in equipment_data:
+                for attribute in equipment.attributes_equipment:
+                    data_line.clear()
+                    data_line.append(equipment.row)
+                    data_line.append(equipment.press_mark)
+                    data_line.append(attribute.name_attribute)
+                    data_line.append(attribute.value_attribute)
+                    sheet.append(data_line)
+            sheet.column_dimensions['B'].width = 13
+            sheet.column_dimensions['C'].width = 20
+            sheet.column_dimensions['D'].width = 50
+        else:
+            print(f"save_equipment_attributes >> в файле {self.full_path} не найден лист {sheet_name}.")
+
+    def save_equipment_options(self, equipment_data):
+        sheet_name = self.items_equipment_set[2]  # 'Options'
+        if sheet_name in self.book.sheetnames:
+            sheet = self.book[sheet_name]
+            header = ["ROW", "PRESSMARK", "PARAMETER_TITLE",
+                      "LEFT_BORDER", "RIGHT_BORDER", "UNIT_OF_MEASURE", "STEP", "PARAMETER_TYPE"]
+            self.header_write(sheet, header)
+            data_line = list()
+            for equipment in equipment_data:
+                for option in equipment.options_equipment:
+                    data_line.clear()
+                    data_line.append(equipment.row)
+                    data_line.append(equipment.press_mark)
+                    data_line.append(option.name_option)
+                    for value in option.value_option:
+                        data_line.append(value[1])
+                    sheet.append(data_line)
+            sheet.column_dimensions['B'].width = 12
+            sheet.column_dimensions['C'].width = 25
+        else:
+            print(f"save_equipment_options >> в файле {self.full_path} не найден лист {sheet_name}.")
