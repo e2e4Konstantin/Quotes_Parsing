@@ -94,7 +94,7 @@ class Quote:
             re.compile(r"^от"), re.compile(r"^до"), re.compile(r"^ед[\.\s]\s?изм"), re.compile(r"^шаг"),
             re.compile(r"^тип"),
         ]
-        numbers_pattern = re.compile("^\d+(?:[\.,])?\d?$")
+        numbers_pattern = re.compile(r"^\d+(?:[\.,])?\d?$")
         main_header_option = ["от", "до (включительно)", "Ед. изм.", "Шаг", "Тип диапазона значений"]
         main_header_option = [x.strip().lower() for x in main_header_option]
         line_main_header = " ".join(main_header_option)
@@ -114,7 +114,7 @@ class Quote:
             result_match = set()
             # Проверка названий столбцов таблицы со значениями параметра.
             for i in range(len(pattern)):
-                result = pattern[i].match(header[i])
+                result = pattern[i].match(header[i])        # *!!!!!!!!
                 result_match.add(True) if result else result_match.add(False)
             if not all(result_match):
                 error_chest["header"] = f"нетиповой заголовок: '{line_header}' / '{line_main_header}'"
@@ -185,6 +185,7 @@ class Equipment:
     use_count: int
     parameterization: bool
     remark: str
+    table: int
     attributes_equipment: list[Attribute] = field(default_factory=list)
     options_equipment: list[Option] = field(default_factory=list)
 

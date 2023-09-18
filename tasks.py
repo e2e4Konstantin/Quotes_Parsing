@@ -1,7 +1,7 @@
 from utilites import (SourceData, tables, quotes, collections, failed_tables,
                       check_cod_quotes, read_collection, read_tables, read_quotes,
                       resource_data, read_resources,
-                      read_equipment, equipment_data,
+                      read_equipment, equipment_data, equipment_tables, resource_tables,
                       ExcelControl)
 import contextlib
 import io
@@ -43,7 +43,12 @@ def handling_quotes(file_data: tuple[str, str, str]):
         mill_quote_data_file(file_data)
         print(f"{'-' * 40}>>")
         for quote in quotes:
-            quote.options_control()
+            # print(f"{quote}")
+            try:
+                quote.options_control()
+            except Exception as err:
+                print(f"{quote}\nошибка контроля расценки: {err}")
+                sys.exit()
         print()
     print(s.getvalue())
 
@@ -54,7 +59,7 @@ def handling_quotes(file_data: tuple[str, str, str]):
     #         print(r)
     #         break
     file_out = file_data[0][:-5] + "_output.xlsx"
-    save_all_to_excel_file(file_out, r'output', "Quote", s.getvalue())
+    save_all_to_excel_file(file_out, r'output', "Quote", s.getvalue()) # ""
 
 
 def stream_handling_quotes(files: list[tuple[str, str, str]]):
@@ -101,6 +106,7 @@ def handling_resource(file_data: tuple[str, str, str]):
         ex.save_resources(resource_data)
         ex.save_resources_attributes(resource_data)
         ex.save_resources_options(resource_data)
+        ex.save_resources_tables(resource_tables)
         ex.save_console(s.getvalue())
 
 
@@ -119,4 +125,5 @@ def equipment_handling(file_data: tuple[str, str, str]):
         ex.save_equipment(equipment_data)
         ex.save_equipment_attributes(equipment_data)
         ex.save_equipment_options(equipment_data)
+        ex.save_equipment_tables(equipment_tables)
         ex.save_console(s.getvalue())

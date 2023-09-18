@@ -22,8 +22,8 @@ class ExcelControl:
         self.tab_color['Header'] = "0099CCFF"
         self.tab_color['Resources'] = "00993366"
         self.tab_color['Equipment'] = "00FF9900"
-        self.items_resources_set = ['Resources', 'Attributes', 'Options', 'Console']
-        self.items_equipment_set = ['Equipment', 'Attributes', 'Options', 'Console']
+        self.items_resources_set = ['Resources', 'Attributes', 'Options', 'Console', 'Tables']
+        self.items_equipment_set = ['Equipment', 'Attributes', 'Options', 'Console', 'Tables']
 
         self.header_style = None
 
@@ -207,13 +207,14 @@ class ExcelControl:
             text_by_lines = text_in.splitlines()
             for i, line in enumerate(text_by_lines):
                 sheet.append((line,))
-                sheet.cell(row=i+1, column=1).font = Font(size=10)
-                sheet.cell(row=i + 1, column=1).alignment = Alignment(horizontal='left', vertical="bottom", wrapText=True)
+                sheet.cell(row=i + 1, column=1).font = Font(size=10)
+                sheet.cell(row=i + 1, column=1).alignment = Alignment(horizontal='left', vertical="bottom",
+                                                                      wrapText=True)
         else:
             print(f"save_console >> в файле {self.full_path} не найден лист {sheet_name}.")
 
     def save_failed_tables(self, broken_tables: list[tuple[int, str]]):  # 'BrokenTable' 6
-        sheet_name = self.items_quote_set[6]    # 'BrokenTable'
+        sheet_name = self.items_quote_set[6]  # 'BrokenTable'
         if sheet_name in self.book.sheetnames:
             sheet = self.book[sheet_name]
             header = ["row", "название таблицы"]
@@ -358,3 +359,27 @@ class ExcelControl:
             sheet.column_dimensions['C'].width = 25
         else:
             print(f"save_equipment_options >> в файле {self.full_path} не найден лист {sheet_name}.")
+
+    def save_equipment_tables(self, tables_data):
+        sheet_name = self.items_equipment_set[4]  # 'Tables'
+        if sheet_name in self.book.sheetnames:
+            sheet = self.book[sheet_name]
+            header = ["row", "номер", "код", "атрибутов", "параметров", "название", "атрибуты", "параметры"]
+            self.header_write(sheet, header)
+            for table in tables_data:
+                data_line = table.to_list()
+                sheet.append(data_line)
+        else:
+            print(f"save_equipment_tables >> в файле {self.full_path} не найден лист {sheet_name}.")
+
+    def save_resources_tables(self, tables_data):
+        sheet_name = self.items_resources_set[4]  # 'Tables'
+        if sheet_name in self.book.sheetnames:
+            sheet = self.book[sheet_name]
+            header = ["row", "номер", "код", "атрибутов", "параметров", "название", "атрибуты", "параметры"]
+            self.header_write(sheet, header)
+            for table in tables_data:
+                data_line = table.to_list()
+                sheet.append(data_line)
+        else:
+            print(f"save_resources_tables >> в файле {self.full_path} не найден лист {sheet_name}.")

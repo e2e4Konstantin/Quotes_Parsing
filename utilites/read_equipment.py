@@ -96,6 +96,7 @@ def get_device(data: SourceData, row: int, parent_table_index: int) -> Equipment
         use_count=int(statistics_value) if statistics_value.isdigit() else 0,
         parameterization=bool(data.get_cell_str_value(row, data.get_column_number("G"))),
         remark=data.get_cell_str_value(row, data.get_column_number("H")),
+        table=parent_table_index
     )
     # print(f"\tдля устройства в строке: {row} найдена таблица : {equipment_tables[parent_table_index].cod_table}")
     # заполняем атрибуты
@@ -147,7 +148,7 @@ def read_equipment(data: SourceData):
             if check_by_list(data, row_i, ['B', 'C', 'D'], "equipment"):
                 equipment_with_data += 1
                 if is_data_on_right_side(data, row_i, "H"):
-                    owner_table_row = find_row_parent_table(row_i, table_rows)
+                    owner_table_row = find_row_parent_table(row_i, table_rows)  # найти ближайшую сверху таблицу
                     if owner_table_row >= 0:
                         equipment_data.append(get_device(data, row_i, owner_table_row))
                     else:
