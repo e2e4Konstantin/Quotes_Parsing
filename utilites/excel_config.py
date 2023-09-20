@@ -2,9 +2,8 @@ import openpyxl
 from openpyxl.styles import (NamedStyle, Font, Border, Side, PatternFill, Alignment)
 import os
 
-from .quote_definition import Quote, Collection, Resource, Equipment
+from .quote_definition import Quote, Collection, Resource, Equipment, resource_tables
 from dataclasses import fields
-
 
 class ExcelControl:
     def __init__(self, excel_file_name: str = None, file_path: str = None, use: str = None):
@@ -229,12 +228,13 @@ class ExcelControl:
         sheet_name = self.items_resources_set[0]  # Resources
         if sheet_name in self.book.sheetnames:
             sheet = self.book[sheet_name]
-            header = ["ROW", "A", "B", "PRESSMARK", "TITLE", "UOM", "USE_COUNT", "PARAMETERIZED_FLAG"]
+            header = ["ROW", "A", "B", "PRESSMARK", "TITLE", "UOM", "USE_COUNT", "PARAMETERIZED_FLAG", "TABLE"]  #
             self.header_write(sheet, header)
-            data_line = list()
+            # data_line = list()
             for resource in resource_data:
                 line_data = [getattr(resource, x.name) for x in fields(Resource)]
                 line_data[7] = "++" if line_data[7] else " "
+                line_data[8] = resource_tables[resource.table].cod_table
                 sheet.append(line_data[:-2])
             sheet.column_dimensions['D'].width = 15
             sheet.column_dimensions['E'].width = 80

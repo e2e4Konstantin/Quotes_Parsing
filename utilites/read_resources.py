@@ -93,6 +93,7 @@ def get_resource(data: SourceData, row: int, parent_table_index: int) -> Resourc
         measuring_unit=data.get_cell_str_value(row, data.get_column_number("E")),
         use_count=int(statistics_value) if statistics_value.isdigit() else 0,
         parameterization=bool(data.get_cell_str_value(row, data.get_column_number("G"))),
+        table=parent_table_index
     )
     # print(f"\tдля ресурса в строке: {row} найдена таблица : {resource_tables[parent_table_index].cod_table}")
     # заполняем атрибуты

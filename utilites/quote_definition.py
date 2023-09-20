@@ -89,7 +89,7 @@ class Quote:
         return [getattr(self, x.name) for x in fields(self)]
 
     def options_control(self, limit_quantity: int = 5) -> None:
-        mistake_unit = ["Бод",	"в", "ссм", "ч"]
+        mistake_unit = ["Бод", "в", "ссм", "ч"]
         pattern = [
             re.compile(r"^от"), re.compile(r"^до"), re.compile(r"^ед[\.\s]\s?изм"), re.compile(r"^шаг"),
             re.compile(r"^тип"),
@@ -101,7 +101,7 @@ class Quote:
         error_set = []
         for option in self.options_quote:
             error_chest = {
-                "message": f"параметр: '{option.name_option}' расценка: {self.cod_quote}{' '*5} ",
+                "message": f"параметр: '{option.name_option}' расценка: {self.cod_quote}{' ' * 5} ",
                 "quantity": "", "header": "", "unit_measuring": ""
             }
 
@@ -114,7 +114,7 @@ class Quote:
             result_match = set()
             # Проверка названий столбцов таблицы со значениями параметра.
             for i in range(len(pattern)):
-                result = pattern[i].match(header[i])        # *!!!!!!!!
+                result = pattern[i].match(header[i])  # *!!!!!!!!
                 result_match.add(True) if result else result_match.add(False)
             if not all(result_match):
                 error_chest["header"] = f"нетиповой заголовок: '{line_header}' / '{line_main_header}'"
@@ -134,12 +134,6 @@ class Quote:
             print("\t".join(error_set))
 
 
-
-
-
-
-
-
 @dataclass
 class Collection:
     """ Сборник """
@@ -149,7 +143,6 @@ class Collection:
     quantity_parameterized_quotes: int = 0
     quantity_not_parameterized_quotes: int = 0
     not_parameterized_list: list[str] = field(default_factory=list)
-
 
     def __str__(self):
         s = '; '.join(f'{x.name}={getattr(self, x.name)!r}' for x in fields(self))
@@ -166,8 +159,10 @@ class Resource:
     measuring_unit: str
     use_count: int
     parameterization: bool
+    table: int
     attributes_resource: list[Attribute] = field(default_factory=list)
     options_resource: list[Option] = field(default_factory=list)
+
 
     def __str__(self):
         s = '; '.join(f'{x.name}={getattr(self, x.name)!r}' for x in fields(self))
@@ -192,10 +187,6 @@ class Equipment:
     def __str__(self):
         s = '; '.join(f'{x.name}={getattr(self, x.name)!r}' for x in fields(self))
         return f'{type(self).__name__}({s})'
-
-
-
-
 
 
 QUOTE_TYPE: list[str] = ["основная", "дополнительная"]
