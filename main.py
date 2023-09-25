@@ -27,8 +27,8 @@ if __name__ == "__main__":
     # fn = 3
     # handling_quotes((source_files[fn][0], paths[pl], source_files[fn][1]))
 
-    fn = 6
-    handling_resource((source_files[fn][0], paths[pl], source_files[fn][1]))
+    # fn = 6
+    # handling_resource((source_files[fn][0], paths[pl], source_files[fn][1]))
 
-    # fn = 7
-    # equipment_handling((source_files[fn][0], paths[pl], source_files[fn][1]))
+    fn = 7
+    equipment_handling((source_files[fn][0], paths[pl], source_files[fn][1]))
