@@ -113,6 +113,10 @@ class SourceData(Stuff):
     def get_data(self):
         try:
             if self.full_path:
+                # отменить все фильтры
+                # tbl.autoFilter.filterColumn.clear()
+                
+
                 self.df = pandas.read_excel(self.full_path, sheet_name=self.sheet_name, header=None, dtype="object")
                 if not self.df.empty:
                     self.row_max = self.df.shape[0]-1
