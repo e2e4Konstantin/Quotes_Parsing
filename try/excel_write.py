@@ -110,8 +110,8 @@ def excel_write_attributes(book_name: str):
                 data_line.clear()
                 data_line.append(quote.row_quote)
                 data_line.append(quote.cod_quote)
-                data_line.append(attribute.name_attribute)
-                data_line.append(attribute.value_attribute)
+                data_line.append(str(attribute.name_attribute).strip().capitalize())
+                data_line.append(str(attribute.value_attribute).strip().capitalize())
                 sheet.append(data_line)
 
         book.save(book_name)

@@ -20,12 +20,12 @@ file_queue = [(source_files[x][0], paths[pl], source_files[x][1]) for x in list(
 
 #
 if __name__ == "__main__":
-    print(file_queue)
-    stream_handling_quotes(file_queue)
+    # print(file_queue)
+    # stream_handling_quotes(file_queue)
 
     #
-    # fn = 3
-    # handling_quotes((source_files[fn][0], paths[pl], source_files[fn][1]))
+    fn = 3
+    handling_quotes((source_files[fn][0], paths[pl], source_files[fn][1]))
 
     # fn = 6
     # handling_resource((source_files[fn][0], paths[pl], source_files[fn][1]))

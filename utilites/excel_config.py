@@ -5,6 +5,9 @@ import os
 from .quote_definition import Quote, Collection, Resource, Equipment, resource_tables, equipment_tables
 from dataclasses import fields
 
+from utilites.wildcard_remove import string_cleaning_capitalize
+
+
 class ExcelControl:
     def __init__(self, excel_file_name: str = None, file_path: str = None, use: str = None):
         self.use = use
@@ -115,6 +118,9 @@ class ExcelControl:
         else:
             print(f"save_quote >> в файле {self.full_path} не найден лист {sheet_name}.")
 
+
+
+
     def save_attributes(self, quotes_data):
         sheet_name = self.items_quote_set[1]  # 'Attributes'
         if sheet_name in self.book.sheetnames:
@@ -127,10 +133,12 @@ class ExcelControl:
                     data_line.clear()
                     data_line.append(quote.row_quote)
                     data_line.append(quote.cod_quote)
-                    data_line.append(attribute.name_attribute)
-                    data_line.append(attribute.value_attribute)
+                    data_line.append(string_cleaning_capitalize(attribute.name_attribute))
+                    data_line.append(string_cleaning_capitalize(attribute.value_attribute))
                     sheet.append(data_line)
+            sheet.column_dimensions['B'].width = 12
             sheet.column_dimensions['C'].width = 40
+            sheet.column_dimensions['D'].width = 60
         else:
             print(f"save_attributes >> в файле {self.full_path} не найден лист {sheet_name}.")
 
@@ -147,7 +155,7 @@ class ExcelControl:
                     data_line.clear()
                     data_line.append(quote.row_quote)
                     data_line.append(quote.cod_quote)
-                    data_line.append(option.name_option)
+                    data_line.append(string_cleaning_capitalize(option.name_option))
                     for value in option.value_option:
                         data_line.append(value[1])
                     sheet.append(data_line)
