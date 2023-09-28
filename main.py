@@ -11,7 +11,8 @@ source_files = {
     4: (r"template_4_68.xlsx", "name"),
     5: (r"template_5_67.xlsx", "name"),
     6: (r"Статистика_1_13 Ресурсы.xlsx", "1"),      # Статистика_1_13 Ресурсы.xlsx / res_68.xlsx
-    7: (r"Статистика_1_13 Оборудование.xlsx", "13"),
+    7: (r"Статистика_1_13 Оборудование.xlsx", "13"), #template_3_68_output.xlsx
+    8: (r"renew_template_3_68_output.xlsx", "name"),
 
 }
 pl = "office"   #"home" # "office"
@@ -24,7 +25,7 @@ if __name__ == "__main__":
     # stream_handling_quotes(file_queue)
 
     #
-    fn = 3
+    fn = 8
     handling_quotes((source_files[fn][0], paths[pl], source_files[fn][1]))
 
     # fn = 6
