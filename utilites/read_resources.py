@@ -1,7 +1,9 @@
-from .quote_definition import Resource, resource_data, TableItem, Header, resource_tables, HeaderOption, Attribute, Option
+from .quote_definition import Resource, resource_data, TableItem, Header, resource_tables, HeaderOption, Attribute, \
+    Option
 from .settings import SourceData, DEBUG_ON
 from .check_by_list import check_by_list
 import re
+from difflib import SequenceMatcher
 
 
 def skip_empty_cells(data: SourceData, row, start_column) -> int:
@@ -61,13 +63,31 @@ def get_resource_table(data: SourceData, row: int, start_column: int):
     resource_tables.append(tmp_table)
 
 
-def read_tables_resource(data: SourceData):
+def read_tables_resource_old(data: SourceData):
     pattern_res_tab = re.compile(r"Атрибуты")
     column_number = data.get_column_number("H")
 
     for row in range(0, data.row_max + 1):
         value = data.get_cell_str_value(row, column_number)
         if pattern_res_tab.match(value):
+            value_bottom_row = data.get_cell_str_value(row + 1, column_number)
+            if value_bottom_row:
+                get_resource_table(data, row + 1, column_number)
+
+
+def read_tables_resource(data: SourceData):
+    """
+    Читает данные о таблице в которую сгруппированы ресурсы
+    """
+    bywords = ['Атрибуты', 'Астрибуты', 'Атибуты', 'Атрибуты', 'Атрибуты', 'Атрибуы', 'Aтрибуы', 'Арибуты']
+    column_number = data.get_column_number("H")
+
+    for row in range(0, data.row_max + 1):
+        value = data.get_cell_str_value(row, column_number)
+        # минимальная похожесть
+        value_ratio = max([SequenceMatcher(None, value, ratio).ratio() for ratio in bywords])
+        if value_ratio >= 0.85:
+            # значение ячейки под словом 'Атрибуты'
             value_bottom_row = data.get_cell_str_value(row + 1, column_number)
             if value_bottom_row:
                 get_resource_table(data, row + 1, column_number)
@@ -136,7 +156,7 @@ def read_resources(data: SourceData):
     if len(resource_tables) > 0:
         table_rows: list[int] = [x.row_table for x in resource_tables]
         table_rows.sort()
-        print(f"\nПрочитано таблиц ресурсов: {len(resource_tables)}") # , {table_rows}
+        print(f"\nПрочитано таблиц ресурсов: {len(resource_tables)}")  # , {table_rows}
 
         resource_with_data = 0
         resource_without_data = 0
