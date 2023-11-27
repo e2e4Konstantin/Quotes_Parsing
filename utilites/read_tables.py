@@ -83,7 +83,7 @@ def read_tables(data: SourceData):
     # failed_tables = [] объявлен в quote_definition.py
     failed_tables_count = 0
     for row_i in range(1, data.row_max):
-        base_test = check_by_list(data, row_i, ['B', 'C', 'D', 'E', 'F', 'G', 'H'], "table")
+        base_test = check_by_list(data, row_i, ['B', 'C', 'G', 'H'], "table") # 'D', 'E', 'F',
         if base_test:
             value = data.get_cell_str_value(row_i, data.get_column_number("H"))
             advanced_test = check_by_list(data, row_i - 1, ['L', 'O'], "table")

@@ -7,7 +7,7 @@ import gc
 
 DEBUG_ON = False
 
-TABLES_NUMBER_PATTERN = re.compile(r"\d+\.\d+-\d+\.")
+TABLES_NUMBER_PATTERN = re.compile(r"\d+\.\d+-\d+")
 
 STRONG_MATCH = True
 SOFT_MATCH = False
@@ -31,10 +31,10 @@ pattern_quote.update({"G": (re.compile(r"\d+\.\d+(-\d+)+"), STRONG_MATCH),})  # 
 
 pattern_table = {}
 pattern_table.update(pattern_common_bc)
-pattern_table.update(pattern_common_def)
+pattern_table.update(pattern_common_def) # "D", "E", "F"
 pattern_table.update({
     "G": (re.compile(r"^\s*$"), STRONG_MATCH),  # пустая строка
-    "H": (re.compile(r"Таблица \d+\.\d+-\d+\."), SOFT_MATCH),
+    "H": (re.compile(r"Таблица \d+\.\d+-\d+"), SOFT_MATCH), #r"Таблица \d+\.\d+-\d+\."
     "L": (re.compile(r"Дополнительные расценки"), STRONG_MATCH),
     "O": (re.compile(r"Атрибуты"), STRONG_MATCH),
 })
