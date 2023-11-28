@@ -90,7 +90,9 @@ def handling_resource(file_data: tuple[str, str, str]):
         print(f"<<-----  Ресурсы Start ----->>")
         data = fill_data_from_file(file_data)
         print(f"непустых значений в столбце 'G': {data.df[data.df.columns[6]].count()}")
+
         read_resources(data)
+
         print(f"<<-----  Ресурсы End  ----->>")
     print(s.getvalue())
 

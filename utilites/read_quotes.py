@@ -67,7 +67,7 @@ def read_quotes(data: SourceData):
     recorded_quotes = 0
     blank_attributes_and_options = 0
     for row_i in range(0, data.row_max + 1):
-        base_test = check_by_list(data, row_i, ['B', 'C', 'D', 'E',  'G'], "quote") # 'F',
+        base_test = check_by_list(data, row_i, ['B', 'F', 'G'], "quote") # 'C', 'D', 'E',
         if base_test:
             table_cod = data.get_cell_str_value(row_i, data.get_column_number("F"))
             all_quotes += 1
