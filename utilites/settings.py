@@ -50,14 +50,17 @@ pattern_collection.update({
     "H": (re.compile(r"Сборник \d+\."), SOFT_MATCH),
 })
 
+# глава 2 Машины
 pattern_resource = {
-    "B": (re.compile(r"(?:ТСН|КТЦ)"), SOFT_MATCH),
-    "C": (re.compile(r"\d+\.\d+(-\d+)*"), STRONG_MATCH),
-    "D": (re.compile(r"\S+"), SOFT_MATCH),
-    "H": (re.compile(r"Атрибуты"), SOFT_MATCH),
+    "A": (re.compile(r"\d+"), SOFT_MATCH),
+    "B": (re.compile(r"\d+\.\d+"), SOFT_MATCH),
+    "C": (re.compile(r"\d+\.\d+(-\d+)+"), SOFT_MATCH),
+    "D": (re.compile(r"\d+\.\d+(-\d+)+"), STRONG_MATCH),
+    "E": (re.compile(r"\S+"), SOFT_MATCH),
+    "J": (re.compile(r"Атрибуты"), SOFT_MATCH),
 }
 
-
+# глава 13 Оборудование
 pattern_equipment  = {
     "B": (re.compile(r"(?:ТСН|КТЦ)"), SOFT_MATCH),
     "C": (re.compile(r"\d+\.\d+(-\d+)*"), STRONG_MATCH),
@@ -115,6 +118,7 @@ class SourceData(Stuff):
             if self.full_path:
                 # отменить все фильтры
                 # tbl.autoFilter.filterColumn.clear()
+                # ws.auto_filter.ref = None
                 
 
                 self.df = pandas.read_excel(self.full_path, sheet_name=self.sheet_name, header=None, dtype="object")

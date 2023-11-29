@@ -85,16 +85,16 @@ def fill_data_from_file(file_data: tuple[str, str, str]) -> SourceData | None:
 
 
 def handling_resource(file_data: tuple[str, str, str]):
-    s = io.StringIO()
-    with contextlib.redirect_stdout(s):
-        print(f"<<-----  Ресурсы Start ----->>")
-        data = fill_data_from_file(file_data)
-        print(f"непустых значений в столбце 'G': {data.df[data.df.columns[6]].count()}")
+    # s = io.StringIO()
+    # with contextlib.redirect_stdout(s):
+    print(f"<<-----  Ресурсы Start ----->>")
+    data = fill_data_from_file(file_data)
+    print(f"непустых значений в столбце 'G': {data.df[data.df.columns[6]].count()}")
 
-        read_resources(data)
+    read_resources(data)
 
-        print(f"<<-----  Ресурсы End  ----->>")
-    print(s.getvalue())
+    print(f"<<-----  Ресурсы End  ----->>")
+    # print(s.getvalue())
 
     file_out = file_data[0][:-5] + "_output.xlsx"
     book_out = ExcelControl(file_out, r'output', "Resource")
@@ -103,17 +103,17 @@ def handling_resource(file_data: tuple[str, str, str]):
         ex.save_resources_attributes(resource_data)
         ex.save_resources_options(resource_data)
         ex.save_resources_tables(resource_tables)
-        ex.save_console(s.getvalue())
+        # ex.save_console(s.getvalue())
 
 
 def equipment_handling(file_data: tuple[str, str, str]):
-    s = io.StringIO()
-    with contextlib.redirect_stdout(s):
-        print(f"<<-----  Оборудование Start  ----->>")
-        data = fill_data_from_file(file_data)
-        read_equipment(data)
-        print(f"<<-----  Оборудование End  ----->>")
-    print(s.getvalue())
+    # s = io.StringIO()
+    # with contextlib.redirect_stdout(s):
+    print(f"<<-----  Оборудование Start  ----->>")
+    data = fill_data_from_file(file_data)
+    read_equipment(data)
+    print(f"<<-----  Оборудование End  ----->>")
+    # print(s.getvalue())
 
     file_out = file_data[0][:-5] + "_output.xlsx"
     book_out = ExcelControl(file_out, r'output', "Equipment")
@@ -122,4 +122,4 @@ def equipment_handling(file_data: tuple[str, str, str]):
         ex.save_equipment_attributes(equipment_data)
         ex.save_equipment_options(equipment_data)
         ex.save_equipment_tables(equipment_tables)
-        ex.save_console(s.getvalue())
+        # ex.save_console(s.getvalue())

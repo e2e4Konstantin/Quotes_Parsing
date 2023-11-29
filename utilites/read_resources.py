@@ -79,11 +79,13 @@ def read_tables_resource(data: SourceData):
     """
     Читает данные о таблице в которую сгруппированы ресурсы
     """
-    bywords = ['Атрибуты', 'Астрибуты', 'Атибуты', 'Атрибуты', 'Атрибуты', 'Атрибуы', 'Aтрибуы', 'Арибуты']
-    column_number = data.get_column_number("H")
+    bywords = ['Атрибуты', 'Астрибуты', 'Атибуты', 'Атрибут', 'Aтрибуты', 'Атрибуы', 'Aтрибуы', 'Арибуты']
+    bywords = [x.lower() for x in bywords]
+    column_number = data.get_column_number("J")
 
     for row in range(0, data.row_max + 1):
         value = data.get_cell_str_value(row, column_number)
+        value = value.lower()
         # минимальная похожесть
         value_ratio = max([SequenceMatcher(None, value, ratio).ratio() for ratio in bywords])
         if value_ratio >= 0.85:
@@ -103,16 +105,16 @@ def is_data_on_right_side(data: SourceData, row: int, starting_column: str) -> b
 def get_resource(data: SourceData, row: int, parent_table_index: int) -> Resource:
     """ Читает ресурс из data на строке row. """
     a_value = data.get_cell_str_value(row, data.get_column_number("A"))
-    statistics_value = data.get_cell_str_value(row, data.get_column_number("F"))
+    statistics_value = data.get_cell_str_value(row, data.get_column_number("H"))
     resource_item = Resource(
         row=row + 1,
         a_column=int(a_value) if a_value.isdigit() else 0,
-        origin=data.get_cell_str_value(row, data.get_column_number("B")),
-        press_mark=data.get_cell_str_value(row, data.get_column_number("C")),
-        title=data.get_cell_str_value(row, data.get_column_number("D")).capitalize(),
-        measuring_unit=data.get_cell_str_value(row, data.get_column_number("E")),
+        origin=data.get_cell_str_value(row, data.get_column_number("C")),
+        press_mark=data.get_cell_str_value(row, data.get_column_number("D")),
+        title=data.get_cell_str_value(row, data.get_column_number("E")).capitalize(),
+        measuring_unit=data.get_cell_str_value(row, data.get_column_number("F")),
         use_count=int(statistics_value) if statistics_value.isdigit() else 0,
-        parameterization=bool(data.get_cell_str_value(row, data.get_column_number("G"))),
+        parameterization=bool(data.get_cell_str_value(row, data.get_column_number("I"))),
         table=parent_table_index
     )
     # print(f"\tдля ресурса в строке: {row} найдена таблица : {resource_tables[parent_table_index].cod_table}")
@@ -163,7 +165,7 @@ def read_resources(data: SourceData):
         for row_i in range(0, data.row_max + 1):
             if check_by_list(data, row_i, ['B', 'C', 'D'], "resource"):
                 resource_with_data += 1
-                if is_data_on_right_side(data, row_i, "H"):
+                if is_data_on_right_side(data, row_i, "J"):
                     owner_table_row = find_row_parent_table(row_i, table_rows)
                     if owner_table_row >= 0:
                         resource_data.append(get_resource(data, row_i, owner_table_row))

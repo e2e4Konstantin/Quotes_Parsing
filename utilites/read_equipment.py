@@ -63,11 +63,12 @@ def read_tables_equipment(data: SourceData):
     """ Читает все таблицы в data для элементов оборудования по признаку:
      значение в столбце I, соответствует паттерну pattern_eqp_tab.  """
 
-    pattern_eqp_tab = re.compile(r"Атрибуты")
+    pattern_eqp_tab = re.compile(r"атрибуты")
     column_number = data.get_column_number("I")
 
     for row in range(0, data.row_max + 1):
         value = data.get_cell_str_value(row, column_number)
+        value = value.lower()
         if pattern_eqp_tab.match(value):
             value_bottom_row = data.get_cell_str_value(row + 1, column_number)
             if value_bottom_row:
