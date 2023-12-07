@@ -68,8 +68,7 @@ def read_tables_equipment(data: SourceData):
 
     for row in range(0, data.row_max + 1):
         value = data.get_cell_str_value(row, column_number)
-        value = value.lower()
-        if pattern_eqp_tab.match(value):
+        if value and pattern_eqp_tab.match(value.lower()):
             value_bottom_row = data.get_cell_str_value(row + 1, column_number)
             if value_bottom_row:
                 get_equipment_table(data, row + 1, column_number)

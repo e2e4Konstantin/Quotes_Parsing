@@ -3,15 +3,17 @@ import openpyxl
 import os
 import re
 
-path = r"F:\Kazak\GoogleDrive\NIAC\parameterisation"
-file_name = r"template_5_67.xlsx"
+# path = r"F:\Kazak\GoogleDrive\NIAC\parameterisation"
+path = r"F:\Kazak\GoogleDrive\NIAC\Велесь_Игорь\Файлы к переводу в машиночитаемый вид\07-12-2023"
+
+file_name = r"Расценки_5_68.xlsx"
 full_path = os.path.join(path, file_name)
 
-output_file = r"F:\Temp\NIAC\r_template_5_67.xlsx"
+output_file_name = f"rep_{file_name}"
+output_file = os.path.join(path, output_file_name)
 
 ic(full_path)
 sheet_name = "name"
-
 
 wb = openpyxl.load_workbook(filename=full_path)
 ws = wb[sheet_name]
@@ -36,9 +38,8 @@ for row in range(1, ws.max_row):
         else:
             mess = f"пустой код под таблицей  на строке: {row}"
             ic(mess)
-else:
-    mess = f"пройдено {row} строк. "
-    ic(mess)
+mess = f"пройдено {row} строк. "
+ic(mess)
 
 
 wb.save(output_file)

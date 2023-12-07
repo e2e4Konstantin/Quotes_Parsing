@@ -26,8 +26,5 @@ if not df.empty:
         match_result = table_re.match(title)
         if match_result:
             ic(row_i, code, code_bottom, title)
-
-
-
 else:
     ic("данные не прочитались")
