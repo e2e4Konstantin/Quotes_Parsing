@@ -8,6 +8,7 @@ from dataclasses import fields
 def get_quote(data: SourceData, row: int, own_table: TableItem) -> Quote:
     """ Читает расценку из data на строке row в таблице own_table"""
     stat_val = data.get_cell_str_value(row, data.get_column_number("J"))
+    algorithm_val = data.get_cell_str_value(row, data.get_column_number("N"))
     unit_quote = Quote(
         row_quote=row+1,
         table_quote=data.get_cell_str_value(row, data.get_column_number("F")),
@@ -17,7 +18,9 @@ def get_quote(data: SourceData, row: int, own_table: TableItem) -> Quote:
         statistics_quote=int(stat_val) if stat_val.isdigit() else 0,
         parameterized_quote=bool(data.get_cell_str_value(row, data.get_column_number("K"))),
         type_quote=data.get_cell_str_value(row, data.get_column_number("L")),
-        parent_quote=data.get_cell_str_value(row, data.get_column_number("M"))
+        parent_quote=data.get_cell_str_value(row, data.get_column_number("M")),
+        algorithm=int(algorithm_val) if algorithm_val.isdigit() else 0
+
     )
     if own_table:
         # заполняем атрибуты

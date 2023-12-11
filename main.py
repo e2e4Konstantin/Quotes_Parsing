@@ -3,8 +3,8 @@ from tasks import handling_quotes, handling_resource, stream_handling_quotes, eq
 paths = {
     # "home": r"F:\Kazak\GoogleDrive\1_KK\Job_CNAC\1_targets\SRC\11-09-2023",
     # "home": r"F:\Kazak\GoogleDrive\NIAC\parameterisati/on",
-    # "home": r"F:\Kazak\GoogleDrive\NIAC\Велесь_Игорь\Файлы к переводу в машиночитаемый вид\07-12-2023",
-    "home": r"F:\Temp\NIAC",
+    "home": r"F:\Kazak\GoogleDrive\NIAC\Велесь_Игорь\Файлы к переводу в машиночитаемый вид\07-12-2023",
+    # "home": r"F:\Temp\NIAC",
 
 
 
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     # stream_handling_quotes(file_queue)
 
     #
-    fn = 33
+    fn = 5
     handling_quotes((source_files[fn][0], paths[pl], source_files[fn][1]))
 
     # fn = 11     # машины Глава 2

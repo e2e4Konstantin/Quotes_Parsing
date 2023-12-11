@@ -67,6 +67,7 @@ class Quote:
     parameterized_quote: bool = False
     type_quote: str = ""
     parent_quote: str = ""
+    algorithm: int = 0
 
     attributes_quote: list[Attribute] = field(default_factory=list)
     options_quote: list[Option] = field(default_factory=list)
