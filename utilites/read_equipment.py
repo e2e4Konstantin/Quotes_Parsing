@@ -1,7 +1,7 @@
 from .quote_definition import TableItem, Header, HeaderOption, Attribute, Option
 from .quote_definition import Equipment, equipment_data, equipment_tables
 
-from .settings import SourceData, DEBUG_ON
+from config.settings import SourceData
 from .check_by_list import check_by_list, skip_empty_cells
 import re
 

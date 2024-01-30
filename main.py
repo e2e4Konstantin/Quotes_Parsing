@@ -5,7 +5,7 @@ from tasks import handling_quotes, handling_resource, stream_handling_quotes, eq
 
 from config import work_place
 
-now = "home"  # office  # home
+now = "office"  # office  # home
 _, src_path, output_path = work_place(now)
 
 source_files = (
@@ -13,14 +13,15 @@ source_files = (
     "Машины_2_68.xlsx",
     "Расценки_3_68.xlsx",
     "Расценки_4_68.xlsx",
-    "Расценки_5_68.xlsx",
+    "Расценки_5_67.xlsx",
     "Оборудование_13.xlsx",
 )
+files_path = tuple([os.path.join(src_path, data_file) for data_file in source_files])
 
 if __name__ == "__main__":
-    for data_file in source_files:
-        split_data = os.path.join(src_path, data_file)
-        ic(split_data)
+    data = files_path[4]
+    ic(data)
+    handling_quotes(data, 'name')
 
     # print(file_queue)
     # stream_handling_quotes(file_queue)

@@ -1,5 +1,3 @@
-from .settings import SourceData
-
 from .quote_definition import tables, quotes, collections, failed_tables, TableItem,  Collection, Quote
 from .quote_definition import resource_data, equipment_data, equipment_tables, resource_tables
 

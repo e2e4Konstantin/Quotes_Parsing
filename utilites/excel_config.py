@@ -113,7 +113,7 @@ class ExcelControl:
                 line_data[6] = "++" if line_data[6] else " "
                 line_data[9] = line_data[9] if line_data[9] > 0 else " "
                 sheet.append(line_data[:-2])
-                sheet.append(line_data[:-2])
+                # sheet.append(line_data[:-2])
             sheet.column_dimensions['C'].width = 20
             sheet.column_dimensions['D'].width = 100
             sheet.column_dimensions['G'].width = 20

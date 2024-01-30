@@ -1,5 +1,5 @@
-from .quote_definition import collections, Collection, quotes, tables
-from .settings import SourceData, DEBUG_ON
+from .quote_definition import collections, Collection
+from config.settings import SourceData, DEBUG_ON
 from .check_by_list import check_by_list
 
 

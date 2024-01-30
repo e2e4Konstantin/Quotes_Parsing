@@ -10,7 +10,7 @@ def work_place(point_name: str) -> PlacePath:
     places = {
         "office": PlacePath(
             db_file=os.path.join(r"..\DB", db_name),
-            src_path=r"\\bt7-doc\Exchange\Казак К.Э\от Велесь И.О\Файлы к переводу в машиночитаемый вид",
+            src_path=r"\\ds-bt7-03\Exchange\Казак К.Э\от Велесь И.О\Файлы к переводу в машиночитаемый вид\Готово",
             output_path=r"..\output"
         ),
         "home": PlacePath(

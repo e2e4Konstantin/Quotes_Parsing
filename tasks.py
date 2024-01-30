@@ -1,18 +1,19 @@
-from utilites import (SourceData, tables, quotes, collections, failed_tables,
-                      check_cod_quotes, read_collection, read_tables, read_quotes,
-                      resource_data, read_resources,
-                      read_equipment, equipment_data, equipment_tables, resource_tables,
-                      ExcelControl)
 import contextlib
 import io
 import gc
 import sys
-import os
-import pprint
 import pickle
+from icecream import ic
+from pathlib import Path
 
+from config import SourceData
+from utilites import (tables, quotes, collections, failed_tables,
+                      check_cod_quotes, read_collection, read_tables, read_quotes,
+                      resource_data, read_resources,
+                      read_equipment, equipment_data, equipment_tables, resource_tables,
+                      ExcelControl)
 
-def save_all_to_excel_file(file_name: str, file_path: str, use_type: str, console_text: str = "") -> None:
+def _save_all_to_excel_file(file_name: str, file_path: str, use_type: str, console_text: str = "") -> None:
     book_out = ExcelControl(file_name, file_path, use_type)
     with book_out as ex:
         ex.save_quotes(quotes)
@@ -24,9 +25,12 @@ def save_all_to_excel_file(file_name: str, file_path: str, use_type: str, consol
         ex.save_console(console_text)
 
 
-def mill_quote_data_file(file_data: tuple[str, str, str]) -> None:
-    print(f"файл: {file_data[0]!r}, лист: {file_data[2]!r}, папка: {file_data[1]!r}")
-    data = SourceData(file_name=file_data[0], file_path=file_data[1], sheet_name=file_data[2])
+def _mill_quote_data_file(file_data: str, sheet_name: str) -> None:
+    """ Читает данные из файла с расценками в класс SourceData. """
+    # message = f"файл: {file_data!r}"
+    # ic(message)
+    data = SourceData(full_file_name=file_data, sheet_name=sheet_name)
+
     print(data.df.info(verbose=False, show_counts=False))
     print(f"непустых значений в столбце 'G': {data.df[data.df.columns[6]].count()}", "\n")
     # check_cod_quotes(data)
@@ -37,10 +41,9 @@ def mill_quote_data_file(file_data: tuple[str, str, str]) -> None:
     gc.collect()
 
 
-def handling_quotes(file_data: tuple[str, str, str]):
-    # s = io.StringIO()
-    # with contextlib.redirect_stdout(s):
-    mill_quote_data_file(file_data)
+def handling_quotes(file_data: str, sheet_name: str) -> None:
+    """ Обработка файла с расценками. """
+    _mill_quote_data_file(file_data, sheet_name)
     print(f"{'-' * 40}>>")
     for quote in quotes:
         # print(f"{quote}")
@@ -50,17 +53,15 @@ def handling_quotes(file_data: tuple[str, str, str]):
             print(f"{quote}\nошибка контроля расценки: {err}")
             sys.exit()
     print()
-    # print(s.getvalue())
-
-    file_out = file_data[0][:-5] + "_output.xlsx"
-    save_all_to_excel_file(file_out, r'output', "Quote", "") # "" s.getvalue()
+    file_out = Path(file_data).name[:-5] + "_output.xlsx"
+    _save_all_to_excel_file(file_out, r'output', "Quote", "") # "" s.getvalue()
 
 
 def stream_handling_quotes(files: list[tuple[str, str, str]]):
     s = io.StringIO()
     with contextlib.redirect_stdout(s):
         for file in files:
-            mill_quote_data_file(file)
+            _mill_quote_data_file(file)
             print()
         print(f"\n<<{'-' * 50}>>\nПрочитано расценок: {len(quotes)}\n")
         for quote in quotes:
@@ -71,7 +72,7 @@ def stream_handling_quotes(files: list[tuple[str, str, str]]):
     with open(r'output\out_string.pickle', 'wb') as handle:
         pickle.dump(s.getvalue(), handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-    save_all_to_excel_file("template_all_output.xlsx", r'output', "Quote", s.getvalue())
+    _save_all_to_excel_file("template_all_output.xlsx", r'output', "Quote", s.getvalue())
 
 
 def fill_data_from_file(file_data: tuple[str, str, str]) -> SourceData | None:

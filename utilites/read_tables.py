@@ -1,7 +1,6 @@
 from .quote_definition import Header, HeaderOption, tables, TableItem, failed_tables
-from .settings import SourceData, TABLES_NUMBER_PATTERN, DEBUG_ON
+from config.settings import SourceData, TABLES_NUMBER_PATTERN, DEBUG_ON
 from .check_by_list import check_by_list
-import csv
 
 
 def attributes_get(data: SourceData, src_tables: TableItem, row: int) -> int:

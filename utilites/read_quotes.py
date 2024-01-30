@@ -1,8 +1,6 @@
 from .quote_definition import tables, quotes, Attribute, Quote, Option, heap, TableItem, collections
-from .settings import SourceData, DEBUG_ON
+from config.settings import SourceData, DEBUG_ON
 from .check_by_list import check_by_list
-import csv
-from dataclasses import fields
 
 
 def get_quote(data: SourceData, row: int, own_table: TableItem) -> Quote:

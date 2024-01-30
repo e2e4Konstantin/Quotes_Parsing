@@ -1,6 +1,6 @@
 from .quote_definition import Resource, resource_data, TableItem, Header, resource_tables, HeaderOption, Attribute, \
     Option
-from .settings import SourceData, DEBUG_ON
+from config.settings import SourceData
 from .check_by_list import check_by_list
 import re
 from difflib import SequenceMatcher
