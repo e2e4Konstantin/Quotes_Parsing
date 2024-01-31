@@ -1,6 +1,4 @@
-from tasks import handling_quotes, handling_resource, stream_handling_quotes, equipment_handling
-
-from config import work_place
+from tryout.old_versions.tasks import handling_resource
 
 source_files = {
     1: (r"Материалы_1.xlsx", "report"),

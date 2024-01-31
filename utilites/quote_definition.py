@@ -158,6 +158,7 @@ class Resource:
     press_mark: str
     title: str
     measuring_unit: str
+    okp: str
     use_count: int
     parameterization: bool
     table: int

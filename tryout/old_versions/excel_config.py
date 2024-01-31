@@ -25,7 +25,7 @@ class ExcelControl:
         self.tab_color['Resources'] = "00993366"
         self.tab_color['Equipment'] = "00FF9900"
         self.items_resources_set = ['Resources', 'Attributes', 'Options', 'Console', 'Tables']
-        # self.items_equipment_set = ['Equipment', 'Attributes', 'Options', 'Console', 'Tables']
+        self.items_equipment_set = ['Equipment', 'Attributes', 'Options', 'Console', 'Tables']
 
         self.header_style = None
 
@@ -85,10 +85,12 @@ class ExcelControl:
             for sheet in self.book.worksheets:
                 self.book.remove(sheet)
             items_set = None
-            if self.use == "Quotes":
+            if self.use == "Quote":
                 items_set = self.items_quote_set
-            else:
+            elif self.use == "Resource":
                 items_set = self.items_resources_set
+            elif self.use == "Equipment":
+                items_set = self.items_equipment_set
             for name in items_set:
                 sheet = self.book.create_sheet(name)
                 sheet.sheet_properties.tabColor = self.tab_color[name]
@@ -236,13 +238,13 @@ class ExcelControl:
         sheet_name = self.items_resources_set[0]  # Resources
         if sheet_name in self.book.sheetnames:
             sheet = self.book[sheet_name]
-            header = ["ROW", "A", "B", "PRESSMARK", "TITLE", "UOM", "OKP", "USE_COUNT", "PARAMETERIZED_FLAG", "TABLE"]  #
+            header = ["ROW", "A", "B", "PRESSMARK", "TITLE", "UOM", "USE_COUNT", "PARAMETERIZED_FLAG", "TABLE"]  #
             self.header_write(sheet, header)
             # data_line = list()
             for resource in resource_data:
                 line_data = [getattr(resource, x.name) for x in fields(Resource)]
-                line_data[8] = "++" if line_data[7] else " "
-                line_data[9] = resource_tables[resource.table].cod_table
+                line_data[7] = "++" if line_data[7] else " "
+                line_data[8] = resource_tables[resource.table].cod_table
                 sheet.append(line_data[:-2])
             sheet.column_dimensions['D'].width = 15
             sheet.column_dimensions['E'].width = 80
@@ -302,7 +304,7 @@ class ExcelControl:
             print(f"save_resources_options >> в файле {self.full_path} не найден лист {sheet_name}.")
 
     def save_equipment(self, equipment_data):
-        sheet_name = self.items_resources_set[0]  # Equipment
+        sheet_name = self.items_equipment_set[0]  # Equipment
         if sheet_name in self.book.sheetnames:
             sheet = self.book[sheet_name]
             header = ["ROW", "A", "B", "PRESSMARK", "TITLE", "UOM", "USE_COUNT", "PARAMETERIZED_FLAG", "REMARK", "TABLE"]
@@ -330,7 +332,7 @@ class ExcelControl:
             print(f"save_equipment >> в файле {self.full_path} не найден лист {sheet_name}.")
 
     def save_equipment_attributes(self, equipment_data):
-        sheet_name = self.items_resources_set[1]  # 'Attribute'
+        sheet_name = self.items_equipment_set[1]  # 'Attribute'
         if sheet_name in self.book.sheetnames:
             sheet = self.book[sheet_name]
             header = ["ROW", "PRESSMARK", "ATTRIBUTE_TITLE", "VALUE", ]
@@ -351,7 +353,7 @@ class ExcelControl:
             print(f"save_equipment_attributes >> в файле {self.full_path} не найден лист {sheet_name}.")
 
     def save_equipment_options(self, equipment_data):
-        sheet_name = self.items_resources_set[2]  # 'Options'
+        sheet_name = self.items_equipment_set[2]  # 'Options'
         if sheet_name in self.book.sheetnames:
             sheet = self.book[sheet_name]
             header = ["ROW", "PRESSMARK", "PARAMETER_TITLE",
@@ -373,7 +375,7 @@ class ExcelControl:
             print(f"save_equipment_options >> в файле {self.full_path} не найден лист {sheet_name}.")
 
     def save_equipment_tables(self, tables_data):
-        sheet_name = self.items_resources_set[4]  # 'Tables'
+        sheet_name = self.items_equipment_set[4]  # 'Tables'
         if sheet_name in self.book.sheetnames:
             sheet = self.book[sheet_name]
             header = ["row", "номер", "код", "атрибутов", "параметров", "название", "атрибуты", "параметры"]

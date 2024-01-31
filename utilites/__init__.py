@@ -6,7 +6,7 @@ from .read_quotes import read_quotes
 from .read_collection import read_collection
 from .check_cod_quotes import check_cod_quotes
 
-from .read_resources import read_resources
-from .read_equipment import read_equipment
+from .read_machines import read_machines
+from .read_equipment import read_materials_equipment
 
 from .excel_config import ExcelControl

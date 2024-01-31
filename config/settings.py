@@ -6,6 +6,7 @@ import pandas
 from files_features import file_exists, output_message_exit
 
 DEBUG_ON = False
+OUTPUT_FILE_PATH = r"output"
 
 TABLES_NUMBER_PATTERN = re.compile(r"\d+\.\d+-\d+")
 
@@ -89,10 +90,11 @@ class Stuff:
 
 
 class SourceData(Stuff):
-    def __init__(self, full_file_name, sheet_name):
+    def __init__(self, full_file_name, sheet_name, item_name: str) -> None:
         super().__init__()
         self.full_path = full_file_name
         self.sheet_name = sheet_name
+        self.item_name = item_name
         self.df: pandas.DataFrame() = None
 
         self.row_max = 0  # максимальный индекс строки
@@ -120,8 +122,8 @@ class SourceData(Stuff):
             output_message_exit(f"ошибка чтения данныз из фйла: {self.full_path!r}", f"{err}")
 
     def __str__(self):
-        return f"файл: {self.full_path}\nтаблица: {self.sheet_name}', строк: {self.row_max + 1}, столбцов: {self.column_max + 1}\n" \
-               f"pandas.version: {pandas.__version__}"  # \n{self.df}
+        return f"{self.item_name!r} файл: {self.full_path}\nтаблица: {self.sheet_name}', строк: {self.row_max + 1}, столбцов: {self.column_max + 1}\n" \
+               f"{self.df.info(verbose=False, show_counts=False)}\npandas.version: {pandas.__version__}"  # \n{self.df}
 
     def get_cell_str_value(self, row, column) -> str | None:
         # value: str = "" if pd.isnull(tmp_val) else tmp_val

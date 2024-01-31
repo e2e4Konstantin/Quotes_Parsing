@@ -132,15 +132,15 @@ def find_row_parent_table(row: int, table_rows: list[int]) -> int:
     return min_dist if min_dist >= 0 else -1
 
 
-def read_equipment(data: SourceData):
-    """ Читает строки с описанием оборудования из данных data.
-    Проверяет строку по шаблону для оборудования. Записывает элемент оборудования в список equipment_data. """
+def read_materials_equipment(data: SourceData):
+    """ Читает строки с описанием оборудования/материала из данных data.
+    Записывает элемент оборудования в список equipment_data. """
 
     read_tables_equipment(data)
     if len(equipment_tables) > 0:
         table_rows: list[int] = [x.row_table for x in equipment_tables]
         table_rows.sort()
-        print(f"\nПрочитано таблиц оборудования: {len(equipment_tables)}")
+        print(f"\nПрочитано таблиц {data.item_name!r}: {len(equipment_tables)}")
 
         equipment_with_data = 0
         equipment_without_data = 0
@@ -152,14 +152,14 @@ def read_equipment(data: SourceData):
                     if owner_table_row >= 0:
                         equipment_data.append(get_device(data, row_i, owner_table_row))
                     else:
-                        print(f"для устройства на строке {row_i} не найдена таблица.")
+                        print(f"для {data.item_name!r} на строке {row_i} не найдена таблица.")
                 else:
                     equipment_without_data += 1
 
         print(f"\nОбработано строк: {data.row_max}")
-        print(f"Обработано устройств: {equipment_with_data}")
+        print(f"Обработано {data.item_name!r}: {equipment_with_data}")
 
-        print(f"Записано устройств: {len(equipment_data)}")
-        print(f"Устройств без параметров/атрибутов: {equipment_without_data}")
+        print(f"Записано {data.item_name!r}: {len(equipment_data)}")
+        print(f"{data.item_name!r} без параметров/атрибутов: {equipment_without_data}")
     else:
-        print(f"В оборудовании не найдено ни одной таблицы с атрибутами/параметрами")
+        print(f"для {data.item_name!r} в фале {data.full_path}\nне найдено ни одной таблицы с атрибутами/параметрами")
